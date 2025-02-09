@@ -11,13 +11,11 @@ public class SuitController {
     public SuitController(SuitView view) {
         this.view = view;
         try {
-            // Load suit data from CSV file
             suits = SuperheroSuit.loadFromCSV(CSV_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Add event listeners
         view.addCheckListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 checkSuit();
@@ -29,9 +27,14 @@ public class SuitController {
                 repairSuit();
             }
         });
+
+        view.addLogListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showRepairLog();
+            }
+        });
     }
 
-    // Check suit validity
     private void checkSuit() {
         String suitId = view.getSuitId();
         SuperheroSuit suit = findSuitById(suitId);
@@ -42,13 +45,12 @@ public class SuitController {
         }
 
         if (suit.isValid()) {
-            view.setResult("✅ Suit " + suit.getType() + " is valid!", false);
+            view.setResult("✅ Suit " + suit.getType() + " is valid! durability: " + suit.getDurability(), false);
         } else {
-            view.setResult("⚠️ Suit " + suit.getType() + " needs repair!", true);
+            view.setResult("⚠️ Suit " + suit.getType() + " needs repair! durability: " + suit.getDurability(), true);
         }
     }
 
-    // Repair suit and save updates to CSV file
     private void repairSuit() {
         String suitId = view.getSuitId();
         SuperheroSuit suit = findSuitById(suitId);
@@ -64,7 +66,11 @@ public class SuitController {
         }
     }
 
-    // Find suit by ID from the list
+    private void showRepairLog() {
+        String log = SuperheroSuit.getRepairLog();
+        view.showRepairLog(log);
+    }
+
     private SuperheroSuit findSuitById(String suitId) {
         for (SuperheroSuit suit : suits) {
             if (suit.getSuitId().equals(suitId))
