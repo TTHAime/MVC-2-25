@@ -39,9 +39,9 @@ public class SuitController {
         }
 
         if (suit.isValid()) {
-            view.setResult("✅ Suit " + suit.getType() + " is valid!", false);
+            view.setResult("✅ Suit " + suit.getType() + " is valid! durability: " + suit.getDurability(), false);
         } else {
-            view.setResult("⚠️ Suit " + suit.getType() + " needs repair!", true);
+            view.setResult("⚠️ Suit " + suit.getType() + " needs repair! durability:" + suit.getDurability(), true);
         }
     }
 
