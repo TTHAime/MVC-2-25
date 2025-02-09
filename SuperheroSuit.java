@@ -5,12 +5,12 @@ public class SuperheroSuit {
     private String suitId;
     private String type;
     private int durability;
+    private static final String REPAIR_LOG_FILE = "repair_log.txt"; // Log file path
 
     public SuperheroSuit(String suitId, String type, int durability) {
         this.suitId = suitId;
         this.type = type;
         this.durability = durability;
-
     }
 
     public String getSuitId() {
@@ -25,9 +25,15 @@ public class SuperheroSuit {
         return durability;
     }
 
-    // Ensure max durability does not exceed 100
+    // Ensure max durability does not exceed 100 and LOG repairs
     public void repair() {
-        durability = Math.min(100, durability + 25);
+        if (durability < 100) {
+            int oldDurability = durability;
+            durability = Math.min(100, durability + 25);
+
+            // Log the repair action
+            logRepair(oldDurability, durability);
+        }
     }
 
     public boolean isValid() {
@@ -62,5 +68,31 @@ public class SuperheroSuit {
             bw.newLine();
         }
         bw.close();
+    }
+
+    // **FIXED: Log repairs to a file**
+    private void logRepair(int oldDurability, int newDurability) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(REPAIR_LOG_FILE, true))) {
+            String logEntry = String.format("[%s] Suit ID: %s, Type: %s, Durability: %d → %d",
+                    new Date(), suitId, type, oldDurability, newDurability);
+            bw.write(logEntry);
+            bw.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Read repair log
+    public static String getRepairLog() {
+        StringBuilder log = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(REPAIR_LOG_FILE))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                log.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            log.append("No repairs recorded yet.");
+        }
+        return log.toString();
     }
 }

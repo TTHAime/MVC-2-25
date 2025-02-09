@@ -27,6 +27,12 @@ public class SuitController {
                 repairSuit();
             }
         });
+
+        view.addLogListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showRepairLog();
+            }
+        });
     }
 
     private void checkSuit() {
@@ -41,7 +47,7 @@ public class SuitController {
         if (suit.isValid()) {
             view.setResult("✅ Suit " + suit.getType() + " is valid! durability: " + suit.getDurability(), false);
         } else {
-            view.setResult("⚠️ Suit " + suit.getType() + " needs repair! durability:" + suit.getDurability(), true);
+            view.setResult("⚠️ Suit " + suit.getType() + " needs repair! durability: " + suit.getDurability(), true);
         }
     }
 
@@ -58,6 +64,11 @@ public class SuitController {
             }
             view.setResult("🔧 Suit repaired! New durability: " + suit.getDurability(), false);
         }
+    }
+
+    private void showRepairLog() {
+        String log = SuperheroSuit.getRepairLog();
+        view.showRepairLog(log);
     }
 
     private SuperheroSuit findSuitById(String suitId) {
