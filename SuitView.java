@@ -3,9 +3,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class SuitView extends JFrame {
-    private JTextField suitIdField;
-    private JButton checkButton, repairButton, logButton;
-    private JLabel resultLabel;
+    private JTextField suitIdField; //ที่กรอก suitId
+    private JButton checkButton, repairButton, logButton; //ปุ่ม ตรวจสอบ , ซ่อม , แสดง Repair log
+    private JLabel resultLabel; // ส่วนแสดงผลลัพธ์ (ตรวจสอบ , การซ่อม)
 
     public SuitView() {
         setTitle("Superhero Suit Checker");
@@ -19,6 +19,7 @@ public class SuitView extends JFrame {
         logButton = new JButton("Show Repair Log");
         resultLabel = new JLabel(" ", SwingConstants.CENTER);
 
+        //add componets
         add(new JLabel("Enter Suit ID:", SwingConstants.CENTER));
         add(suitIdField);
         add(checkButton);
@@ -26,18 +27,24 @@ public class SuitView extends JFrame {
         add(repairButton);
         add(logButton);
 
+        //ปิด repair button ไม่ให้กดถ้ายังไม่ต้องซ่อม
         repairButton.setEnabled(false);
+
+        // ให้ GUI แสดงผลกลางหน้าจอ
+        setLocationRelativeTo(null);
     }
 
     public String getSuitId() {
         return suitIdField.getText();
     }
 
+    //เปิดปุ่ม repair button 
     public void setResult(String result, boolean canRepair) {
         resultLabel.setText(result);
         repairButton.setEnabled(canRepair);
     }
 
+    // แสดง repair log
     public void showRepairLog(String log) {
         JTextArea textArea = new JTextArea(log, 10, 30);
         textArea.setEditable(false);
@@ -45,6 +52,7 @@ public class SuitView extends JFrame {
         JOptionPane.showMessageDialog(this, scrollPane, "Repair Log", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    // add actionlistener
     public void addCheckListener(ActionListener listener) {
         checkButton.addActionListener(listener);
     }

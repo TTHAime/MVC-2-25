@@ -3,10 +3,12 @@ import java.util.*;
 
 public class SuperheroSuit {
     private String suitId;
-    private String type;
-    private int durability;
+    private String type; // Suit type (Powerful = ชุดทรงพลัง, Stealth = ชุดลอบเร้น, Cloak =
+                         // ชุดปกปิดตัวตน)
+    private int durability; // Durability value (0-100)
     private static final String REPAIR_LOG_FILE = "repair_log.txt"; // Log file path
 
+    // Constructor
     public SuperheroSuit(String suitId, String type, int durability) {
         this.suitId = suitId;
         this.type = type;
@@ -25,7 +27,7 @@ public class SuperheroSuit {
         return durability;
     }
 
-    // Ensure max durability does not exceed 100 and LOG repairs
+    // ป้องกันไม่ให้ durability > 100
     public void repair() {
         if (durability < 100) {
             int oldDurability = durability;
@@ -36,6 +38,7 @@ public class SuperheroSuit {
         }
     }
 
+    //ตรวจสอบ durability ว่าต้องซ่อมหรือไม่
     public boolean isValid() {
         switch (type) {
             case "Powerful":
@@ -49,6 +52,7 @@ public class SuperheroSuit {
         }
     }
 
+    //load data from suits.csv
     public static List<SuperheroSuit> loadFromCSV(String filename) throws IOException {
         List<SuperheroSuit> suits = new ArrayList<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -61,6 +65,7 @@ public class SuperheroSuit {
         return suits;
     }
 
+    //Save data back to suits.csv
     public static void saveToCSV(List<SuperheroSuit> suits, String filename) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
         for (SuperheroSuit suit : suits) {
@@ -70,7 +75,7 @@ public class SuperheroSuit {
         bw.close();
     }
 
-    // **FIXED: Log repairs to a file**
+    // Write repair log
     private void logRepair(int oldDurability, int newDurability) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(REPAIR_LOG_FILE, true))) {
             String logEntry = String.format("[%s] Suit ID: %s, Type: %s, Durability: %d → %d",

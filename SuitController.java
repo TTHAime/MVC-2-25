@@ -10,12 +10,15 @@ public class SuitController {
 
     public SuitController(SuitView view) {
         this.view = view;
+
+        //Load CSV
         try {
             suits = SuperheroSuit.loadFromCSV(CSV_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        //Event Handler
         view.addCheckListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 checkSuit();
@@ -35,6 +38,7 @@ public class SuitController {
         });
     }
 
+    //method ตรวจสอบข้อมูลใน CSV , ตรวจสอบ durability ว่าต้องซ่อมหรือไม่
     private void checkSuit() {
         String suitId = view.getSuitId();
         SuperheroSuit suit = findSuitById(suitId);
@@ -51,6 +55,7 @@ public class SuitController {
         }
     }
 
+    // method ซ่อม suit 
     private void repairSuit() {
         String suitId = view.getSuitId();
         SuperheroSuit suit = findSuitById(suitId);
@@ -66,11 +71,13 @@ public class SuitController {
         }
     }
 
+    //method แสดง repairlog
     private void showRepairLog() {
         String log = SuperheroSuit.getRepairLog();
         view.showRepairLog(log);
     }
 
+    //method ค้นหา suitid
     private SuperheroSuit findSuitById(String suitId) {
         for (SuperheroSuit suit : suits) {
             if (suit.getSuitId().equals(suitId))
